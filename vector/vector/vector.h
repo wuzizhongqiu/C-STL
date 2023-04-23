@@ -1,5 +1,6 @@
-#define _CRT_SECURE_NO_WARNINGS 1
+#pragma once
 
+#include "reverse_iterator.h"
 #include <iostream>
 #include <assert.h>
 #include <string.h>
@@ -9,13 +10,32 @@ using namespace std;
 namespace xl
 {
 	template<class T>
-	class vector 
+	class vector
 	{
 	public:
 		typedef T* iterator;
 		typedef const T* const_iterator;
 
+		typedef __reverse_iterator<iterator, T&, T*> reverse_iterator;
+		typedef __reverse_iterator<const_iterator, const T&, const T*> const_reverse_iterator;
+
 		//两种迭代器实现
+		reverse_iterator rbegin() {
+			return reverse_iterator(end());
+		}
+
+		reverse_iterator rend() {
+			return reverse_iterator(begin());
+		}
+
+		const_reverse_iterator rbegin() const {
+			return const_reverse_iterator(end());
+		}
+
+		const_reverse_iterator rend() const {
+			return const_reverse_iterator(begin());
+		}
+
 		iterator begin() {
 			return _start;
 		}
@@ -71,7 +91,7 @@ namespace xl
 		//}
 
 		template<class Inputiterator> //一个拷贝构造接口
-		vector(Inputiterator first, Inputiterator last) 
+		vector(Inputiterator first, Inputiterator last)
 			: _start(nullptr)
 			, _finish(nullptr)
 			, _end_of_storage(nullptr)
@@ -95,7 +115,7 @@ namespace xl
 		{
 			vector<T> tmp(v.begin(), v.end()); //借助这个构造
 			swap(tmp); //让tmp帮我打工 
-		} 
+		}
 
 		vector<T>& operator=(vector<T> v) { //赋值构造 //现代方法
 			swap(v);
@@ -132,11 +152,11 @@ namespace xl
 			else if (n > size) {
 				while (_finish < _start + n) {
 					*_finish = val;
-					_finsh++;
+					_finish++;
 				}
 			}
 			else {
-				_finsh = _start + n;
+				_finish = _start + n;
 			}
 		}
 
@@ -145,8 +165,8 @@ namespace xl
 				size_t sz = size();//提前取好size
 				T* tmp = new T[n];
 				if (_start) { //如果里面有存放数据，就copy一下
- 					//memcpy(tmp, _start, sizeof(T) * sz);
-					for (size_t i; i < sz; i++) {
+					//memcpy(tmp, _start, sizeof(T) * sz);
+					for (size_t i = 0; i < sz; i++) {
 						tmp[i] = _start[i];
 					}
 					delete[] _start;
@@ -189,7 +209,7 @@ namespace xl
 				end--;
 			}
 			*pos = x;//插入
-			_finish++; 
+			_finish++;
 		}
 
 		// stl 规定erase要返回删除位置的下一个位置的迭代器
@@ -222,7 +242,7 @@ namespace xl
 		iterator _end_of_storage;
 	};
 
-//***************************************************下面是测试****************************************************//
+	//***************************************************下面是测试****************************************************//
 
 	void test_vector1() {
 		vector<int> v;
@@ -256,7 +276,7 @@ namespace xl
 			cout << e << " ";
 		}
 		cout << endl;
-	} 
+	}
 
 	void test_vector2() {
 		vector<int> v;
@@ -287,6 +307,22 @@ namespace xl
 		vs = v;
 		for (auto e : vs) {
 			cout << e << " ";
+		}
+		cout << endl;
+	}
+
+	void test_reverse() {
+		vector<int> v;
+		v.push_back(1);
+		v.push_back(2);
+		v.push_back(4);
+		v.push_back(4);
+		v.push_back(5);
+
+		auto it = v.rbegin();
+		while (it != v.rend()) {
+			cout << *it << " ";
+			it++;
 		}
 		cout << endl;
 	}

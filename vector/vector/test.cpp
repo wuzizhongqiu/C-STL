@@ -6,7 +6,7 @@ void test()
 {
 	//xl::test_vector1();
 	//xl::test_vector2();
-	xl::test_vector3();
+	xl::test_reverse();
 
 }
 
