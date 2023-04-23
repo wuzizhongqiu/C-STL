@@ -394,7 +394,7 @@ namespace xl {
 	void test2() {
 		string s1("111111");
 		string s3("hello");
-		s3 += "12415"; 
+		s3 += "12415";  
 		s3.insert(3, "apole");
 		cout << s3.c_str() << endl;
 	}
